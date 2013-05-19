@@ -4,7 +4,10 @@ class StaticController < ApplicationController
   	
   end
 
+  
+
   def results
+  	FormSubmitter.perform_async(params[:search_data])
   	
   end
 

@@ -13,3 +13,15 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+# Ignore ruby version and gemset configuration files.
+.ruby-version
+.ruby-gemset
+
+config/database.yml
+dump.rdb
+
+*.swp
+
+public/system/
+

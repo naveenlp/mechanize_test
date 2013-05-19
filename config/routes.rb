@@ -1,4 +1,8 @@
 MechanizeTest::Application.routes.draw do
+
+  root to: 'static#home'
+
+  match 'results' => 'static#results'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

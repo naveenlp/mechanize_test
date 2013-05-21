@@ -1,9 +1,22 @@
-<div class="center hero-unit">
+<div >
 	<% if((!@google_results) && (!@bing_results)) %>
 	<h3>Please wait for your results...</h3>
 	<% else %>
-	<h3>Result has been obtained!</h3>
-	<h4><%= @google_results.class %></h4>
-	<h4><%= @bing_results[0]["text"] %></h4>
+	<div style="width: 50%; float:left; text-align:left; background-color:rgb(234,234,234);">
+		<h3>Google Results:-</h3>
+		<ul>
+			<% @google_results.each do |g_link| %>
+				<li><a href='<%= g_link["url"]%>'> <%= g_link["text"] %> </a></li>
+			<% end %>
+		</ul>
+	</div>
+	<div style="width: 50%; float:right; text-align:left; background-color:rgb(234,234,234);">
+		<h3>Bing Results:-</h3>
+		<ul>
+			<% @bing_results.each do |b_link| %>
+				<li><a href='<%= b_link["url"]%>'> <%= b_link["text"] %> </a></li>
+			<% end %>
+		</ul>
+	</div>
 	<% end %>
 </div>

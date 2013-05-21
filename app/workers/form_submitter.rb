@@ -9,17 +9,39 @@ class FormSubmitter
 		$redis["saved_search_term"] = search_data.to_s
   		$redis["search_status"] = "started"
   		
-		agent = Mechanize.new
-		page = agent.get("http://www.google.com/")
-		google_form = page.form('f')
-		google_form.q = search_data.to_s
-		search_results = agent.submit(google_form, google_form.buttons.first)
+  		agent = Mechanize.new
+  		google_form = agent.get("http://www.google.com/").form('f')
+  		google_form.q = "maldives"
+  		search_results = agent.submit(google_form, google_form.buttons.first)
 
-		(search_results/"li.g").each do |result|
-			@sitesurl << (result/"a").first.attribute('href') if result.attribute('class').to_s == 'g'
+  		@google_results = Array.new()
+  		search_results.search("li.g").each do |search_list|
+  			link = search_list.search("a").first
+  			if(link.attribute('href').to_s.include?("/url?q="))
+  				link_obj = { "text" => link.text, "url" => link.attribute('href').to_s.gsub('/url?q=','') };
+  				@google_results << link_obj
+
+				Rails.logger.debug link_obj["text"] 
+				Rails.logger.debug link_obj["url"]
+		
+			end
+
 		end
 
-		$redis["results"] =  @sitesurl
+		search_results = agent.get('http://www.bing.com/').forms[0].tap{|f| f.q = 'test'}.submit
+		@bing_results = Array.new()
+
+		search_results.search("li.sa_wr").each do |search_list|
+			link = search_list.search("a").first
+			link_obj = { "text" => link.text, "url" => link.attribute('href').to_s};
+			@bing_results << link_obj
+
+			Rails.logger.debug link_obj["text"] 
+			Rails.logger.debug link_obj["url"]
+		end
+
+		$redis.set("google_results", @google_results.to_json)
+		$redis.set("bing_results",@bing_results.to_json)
 
 		# Rails.logger.debug( "results 4: "+@results)
 		$redis["search_status"] = "finished"

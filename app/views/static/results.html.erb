@@ -1,8 +1,9 @@
 <div class="center hero-unit">
-	<% if(!@results) %>
+	<% if((!@google_results) && (!@bing_results)) %>
 	<h3>Please wait for your results...</h3>
 	<% else %>
 	<h3>Result has been obtained!</h3>
-	<h4><%= @results[0] %></h4>
+	<h4><%= @google_results.class %></h4>
+	<h4><%= @bing_results[0]["text"] %></h4>
 	<% end %>
 </div>
